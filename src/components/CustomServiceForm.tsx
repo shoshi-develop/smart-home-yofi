@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -143,7 +142,8 @@ export const CustomServiceForm = () => {
     const newErrors: Record<string, string> = {};
 
     requiredFields.forEach(field => {
-      if (!formData[field as keyof typeof formData].trim()) {
+      const fieldValue = formData[field as keyof typeof formData];
+      if (typeof fieldValue === 'string' && !fieldValue.trim()) {
         newErrors[field] = 'שדה זה הוא חובה';
       }
     });
