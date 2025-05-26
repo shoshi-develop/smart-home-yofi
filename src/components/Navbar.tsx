@@ -1,0 +1,108 @@
+
+import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { ShoppingCart, Menu, X, Home, Package, BookOpen, Settings } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+
+export const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [cartItems, setCartItems] = useState(3);
+  const location = useLocation();
+
+  const navigation = [
+    { name: 'בית', href: '/', icon: Home },
+    { name: 'מוצרים', href: '/products', icon: Package },
+    { name: 'מדריכים', href: '/guides', icon: BookOpen },
+    { name: 'התאמה אישית', href: '/custom-service', icon: Settings },
+  ];
+
+  const isActive = (path: string) => location.pathname === path;
+
+  return (
+    <nav className="bg-white/80 backdrop-blur-md shadow-lg sticky top-0 z-50">
+      <div className="container mx-auto px-4">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo */}
+          <Link to="/" className="flex items-center space-x-2 rtl:space-x-reverse">
+            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+              <Home className="w-6 h-6 text-white" />
+            </div>
+            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              בית חכם פלוס
+            </span>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-8 rtl:space-x-reverse">
+            {navigation.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className={`flex items-center space-x-2 rtl:space-x-reverse px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    isActive(item.href)
+                      ? 'bg-blue-100 text-blue-700'
+                      : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span>{item.name}</span>
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* Cart and Mobile Menu */}
+          <div className="flex items-center space-x-4 rtl:space-x-reverse">
+            <Button variant="outline" size="sm" className="relative">
+              <ShoppingCart className="w-4 h-4" />
+              {cartItems > 0 && (
+                <Badge className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs bg-blue-600">
+                  {cartItems}
+                </Badge>
+              )}
+            </Button>
+
+            {/* Mobile menu button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              className="md:hidden"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </Button>
+          </div>
+        </div>
+
+        {/* Mobile Navigation */}
+        {isOpen && (
+          <div className="md:hidden py-4 border-t">
+            <div className="flex flex-col space-y-2">
+              {navigation.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    className={`flex items-center space-x-2 rtl:space-x-reverse px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                      isActive(item.href)
+                        ? 'bg-blue-100 text-blue-700'
+                        : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
+                    }`}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <Icon className="w-4 h-4" />
+                    <span>{item.name}</span>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+    </nav>
+  );
+};
