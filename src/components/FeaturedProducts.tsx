@@ -3,10 +3,14 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Star, ShoppingCart, Heart } from 'lucide-react';
-import { useState } from 'react';
+import { useCart } from '@/contexts/CartContext';
+import { useWishlist } from '@/contexts/WishlistContext';
+import { useToast } from '@/hooks/use-toast';
 
 export const FeaturedProducts = () => {
-  const [wishlist, setWishlist] = useState<number[]>([]);
+  const { addToCart } = useCart();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const { toast } = useToast();
 
   const products = [
     {
@@ -16,7 +20,7 @@ export const FeaturedProducts = () => {
       originalPrice: 399,
       rating: 4.8,
       reviews: 156,
-      image: '/placeholder.svg',
+      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop',
       badge: 'פופולרי',
       badgeColor: 'bg-red-500',
       features: ['ראיית לילה', 'זיהוי פנים', 'התראות חכמות']
@@ -28,7 +32,7 @@ export const FeaturedProducts = () => {
       originalPrice: 129,
       rating: 4.9,
       reviews: 243,
-      image: '/placeholder.svg',
+      image: 'https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?w=400&h=300&fit=crop',
       badge: 'חדש',
       badgeColor: 'bg-green-500',
       features: ['16 מיליון צבעים', 'שליטה קולית', 'חיסכון באנרגיה']
@@ -40,7 +44,7 @@ export const FeaturedProducts = () => {
       originalPrice: 1199,
       rating: 4.7,
       reviews: 89,
-      image: '/placeholder.svg',
+      image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&h=300&fit=crop',
       badge: 'מבצע',
       badgeColor: 'bg-orange-500',
       features: ['4 מצלמות', 'מערכת אזעקה', 'אפליקציה חכמה']
@@ -52,19 +56,35 @@ export const FeaturedProducts = () => {
       originalPrice: 249,
       rating: 4.6,
       reviews: 127,
-      image: '/placeholder.svg',
+      image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=400&h=300&fit=crop',
       badge: 'חיסכון',
       badgeColor: 'bg-blue-500',
       features: ['למידה אוטומטית', 'שליטה מרחוק', 'חיסכון 20%']
     }
   ];
 
-  const toggleWishlist = (productId: number) => {
-    setWishlist(prev => 
-      prev.includes(productId) 
-        ? prev.filter(id => id !== productId)
-        : [...prev, productId]
-    );
+  const handleAddToCart = (product: any) => {
+    addToCart(product);
+    toast({
+      title: "הוספת מוצר לעגלה",
+      description: `${product.name} נוסף לעגלה בהצלחה!`,
+    });
+  };
+
+  const toggleWishlist = (product: any) => {
+    if (isInWishlist(product.id)) {
+      removeFromWishlist(product.id);
+      toast({
+        title: "הוסר מרשימת המשאלות",
+        description: `${product.name} הוסר מרשימת המשאלות`,
+      });
+    } else {
+      addToWishlist(product);
+      toast({
+        title: "נוסף לרשימת המשאלות",
+        description: `${product.name} נוסף לרשימת המשאלות`,
+      });
+    }
   };
 
   return (
@@ -95,16 +115,16 @@ export const FeaturedProducts = () => {
                   variant="ghost"
                   size="sm"
                   className={`absolute top-2 left-2 w-8 h-8 rounded-full p-0 bg-white/80 hover:bg-white ${
-                    wishlist.includes(product.id) ? 'text-red-500' : 'text-gray-400'
+                    isInWishlist(product.id) ? 'text-red-500' : 'text-gray-400'
                   }`}
-                  onClick={() => toggleWishlist(product.id)}
+                  onClick={() => toggleWishlist(product)}
                 >
-                  <Heart className={`w-4 h-4 ${wishlist.includes(product.id) ? 'fill-current' : ''}`} />
+                  <Heart className={`w-4 h-4 ${isInWishlist(product.id) ? 'fill-current' : ''}`} />
                 </Button>
               </div>
 
               <div className="p-4">
-                <h3 className="font-semibold text-lg text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                <h3 className="font-semibold text-lg text-gray-900 mb-2 group-hover:text-emerald-600 transition-colors">
                   {product.name}
                 </h3>
                 
@@ -147,7 +167,10 @@ export const FeaturedProducts = () => {
                   </div>
                 </div>
 
-                <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold">
+                <Button 
+                  className="w-full bg-gradient-primary hover:bg-gradient-primary-hover text-white font-semibold"
+                  onClick={() => handleAddToCart(product)}
+                >
                   <ShoppingCart className="w-4 h-4 ml-2" />
                   הוסף לעגלה
                 </Button>
