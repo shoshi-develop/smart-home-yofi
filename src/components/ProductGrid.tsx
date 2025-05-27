@@ -41,7 +41,7 @@ export const ProductGrid = ({ selectedCategory, priceRange }: ProductGridProps) 
       originalPrice: 129,
       rating: 4.9,
       reviews: 243,
-      image: 'https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?w=400&h=300&fit=crop',
+      image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=300&fit=crop',
       badge: 'חדש',
       badgeColor: 'bg-green-500',
       inStock: true
@@ -54,7 +54,7 @@ export const ProductGrid = ({ selectedCategory, priceRange }: ProductGridProps) 
       originalPrice: 249,
       rating: 4.6,
       reviews: 127,
-      image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&h=300&fit=crop',
+      image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=300&fit=crop',
       badge: 'חיסכון',
       badgeColor: 'bg-blue-500',
       inStock: true
@@ -67,7 +67,7 @@ export const ProductGrid = ({ selectedCategory, priceRange }: ProductGridProps) 
       originalPrice: 99,
       rating: 4.5,
       reviews: 89,
-      image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=400&h=300&fit=crop',
+      image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=300&fit=crop',
       badge: 'מבצע',
       badgeColor: 'bg-orange-500',
       inStock: false
@@ -80,7 +80,7 @@ export const ProductGrid = ({ selectedCategory, priceRange }: ProductGridProps) 
       originalPrice: null,
       rating: 4.7,
       reviews: 201,
-      image: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=400&h=300&fit=crop',
+      image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=300&fit=crop',
       badge: null,
       badgeColor: '',
       inStock: true
@@ -93,7 +93,7 @@ export const ProductGrid = ({ selectedCategory, priceRange }: ProductGridProps) 
       originalPrice: 59,
       rating: 4.4,
       reviews: 76,
-      image: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=400&h=300&fit=crop',
+      image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=300&fit=crop',
       badge: 'בסיסי',
       badgeColor: 'bg-gray-500',
       inStock: true
