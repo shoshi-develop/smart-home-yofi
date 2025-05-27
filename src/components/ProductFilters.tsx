@@ -3,7 +3,6 @@ import { Card } from '@/components/ui/card';
 import { Slider } from '@/components/ui/slider';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
-import { useState } from 'react';
 
 interface ProductFiltersProps {
   selectedCategory: string;
@@ -18,9 +17,6 @@ export const ProductFilters = ({
   priceRange, 
   setPriceRange 
 }: ProductFiltersProps) => {
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-  const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
-
   const categories = [
     { id: 'all', name: 'כל המוצרים', count: 106 },
     { id: 'security', name: 'מצלמות אבטחה', count: 24 },
@@ -47,29 +43,6 @@ export const ProductFilters = ({
     { id: 'waterproof', name: 'עמיד למים', count: 34 }
   ];
 
-  const handleClearFilters = () => {
-    setSelectedCategory('all');
-    setPriceRange([0, 5000]);
-    setSelectedBrands([]);
-    setSelectedFeatures([]);
-  };
-
-  const toggleBrand = (brandId: string) => {
-    setSelectedBrands(prev => 
-      prev.includes(brandId)
-        ? prev.filter(id => id !== brandId)
-        : [...prev, brandId]
-    );
-  };
-
-  const toggleFeature = (featureId: string) => {
-    setSelectedFeatures(prev => 
-      prev.includes(featureId)
-        ? prev.filter(id => id !== featureId)
-        : [...prev, featureId]
-    );
-  };
-
   return (
     <div className="space-y-6">
       {/* Categories */}
@@ -81,7 +54,7 @@ export const ProductFilters = ({
               key={category.id}
               className={`flex items-center justify-between p-2 rounded-lg cursor-pointer transition-colors ${
                 selectedCategory === category.id 
-                  ? 'bg-emerald-100 text-emerald-700' 
+                  ? 'bg-blue-100 text-blue-700' 
                   : 'hover:bg-gray-100'
               }`}
               onClick={() => setSelectedCategory(category.id)}
@@ -120,11 +93,7 @@ export const ProductFilters = ({
         <div className="space-y-3">
           {brands.map(brand => (
             <div key={brand.id} className="flex items-center space-x-2 rtl:space-x-reverse">
-              <Checkbox 
-                id={brand.id}
-                checked={selectedBrands.includes(brand.id)}
-                onCheckedChange={() => toggleBrand(brand.id)}
-              />
+              <Checkbox id={brand.id} />
               <label htmlFor={brand.id} className="text-sm font-medium cursor-pointer flex-1">
                 {brand.name}
               </label>
@@ -140,11 +109,7 @@ export const ProductFilters = ({
         <div className="space-y-3">
           {features.map(feature => (
             <div key={feature.id} className="flex items-center space-x-2 rtl:space-x-reverse">
-              <Checkbox 
-                id={feature.id}
-                checked={selectedFeatures.includes(feature.id)}
-                onCheckedChange={() => toggleFeature(feature.id)}
-              />
+              <Checkbox id={feature.id} />
               <label htmlFor={feature.id} className="text-sm font-medium cursor-pointer flex-1">
                 {feature.name}
               </label>
@@ -156,8 +121,11 @@ export const ProductFilters = ({
 
       {/* Clear Filters */}
       <button 
-        className="w-full text-center text-sm text-emerald-600 hover:text-emerald-800 font-medium py-2 px-4 border border-emerald-200 rounded-lg hover:bg-emerald-50 transition-colors"
-        onClick={handleClearFilters}
+        className="w-full text-center text-sm text-blue-600 hover:text-blue-800 font-medium"
+        onClick={() => {
+          setSelectedCategory('all');
+          setPriceRange([0, 5000]);
+        }}
       >
         נקה את כל הפילטרים
       </button>

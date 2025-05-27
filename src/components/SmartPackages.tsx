@@ -3,11 +3,8 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Check, Star, Users } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
 
 export const SmartPackages = () => {
-  const { toast } = useToast();
-
   const packages = [
     {
       id: 1,
@@ -27,7 +24,7 @@ export const SmartPackages = () => {
         'התקנה בסיסית',
         'הדרכה אישית'
       ],
-      includes: 6,
+      includes: 4,
       installation: 'כלולה'
     },
     {
@@ -76,21 +73,6 @@ export const SmartPackages = () => {
     }
   ];
 
-  const handlePackageSelect = (packageItem: any) => {
-    toast({
-      title: "🎉 תודה על הרכישה!",
-      description: (
-        <div className="space-y-2">
-          <p className="font-semibold">{packageItem.name} נרכש בהצלחה!</p>
-          <p>💳 אפשרויות תשלום: אשראי, העברה בנקאית או ביט</p>
-          <p>🚚 משלוח: 24-48 שעות לביתכם</p>
-          <p>📞 נחזור אליכם תוך שעה לתיאום התקנה</p>
-        </div>
-      ),
-      duration: 6000,
-    });
-  };
-
   return (
     <section className="py-16 px-4">
       <div className="container mx-auto">
@@ -107,7 +89,9 @@ export const SmartPackages = () => {
           {packages.map((package_item, index) => (
             <Card 
               key={package_item.id} 
-              className="relative overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-105"
+              className={`relative overflow-hidden hover:shadow-2xl transition-all duration-300 ${
+                index === 1 ? 'scale-105 border-2 border-green-500' : 'hover:scale-105'
+              }`}
             >
               {index === 1 && (
                 <div className="absolute top-0 left-0 right-0 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-center py-2 text-sm font-semibold">
@@ -185,8 +169,11 @@ export const SmartPackages = () => {
                 </div>
 
                 <Button 
-                  className="w-full font-semibold bg-gradient-primary hover:bg-gradient-primary-hover text-white"
-                  onClick={() => handlePackageSelect(package_item)}
+                  className={`w-full font-semibold ${
+                    index === 1 
+                      ? 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700' 
+                      : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700'
+                  } text-white`}
                 >
                   בחר חבילה זו
                 </Button>

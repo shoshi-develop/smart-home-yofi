@@ -4,9 +4,6 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Star, ShoppingCart, Heart, Filter } from 'lucide-react';
-import { useCart } from '@/contexts/CartContext';
-import { useWishlist } from '@/contexts/WishlistContext';
-import { useToast } from '@/hooks/use-toast';
 
 interface ProductGridProps {
   selectedCategory: string;
@@ -14,10 +11,8 @@ interface ProductGridProps {
 }
 
 export const ProductGrid = ({ selectedCategory, priceRange }: ProductGridProps) => {
+  const [wishlist, setWishlist] = useState<number[]>([]);
   const [sortBy, setSortBy] = useState('popular');
-  const { addToCart } = useCart();
-  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
-  const { toast } = useToast();
 
   const allProducts = [
     {
@@ -28,7 +23,7 @@ export const ProductGrid = ({ selectedCategory, priceRange }: ProductGridProps) 
       originalPrice: 399,
       rating: 4.8,
       reviews: 156,
-      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop',
+      image: '/placeholder.svg',
       badge: 'פופולרי',
       badgeColor: 'bg-red-500',
       inStock: true
@@ -41,7 +36,7 @@ export const ProductGrid = ({ selectedCategory, priceRange }: ProductGridProps) 
       originalPrice: 129,
       rating: 4.9,
       reviews: 243,
-      image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=300&fit=crop',
+      image: '/placeholder.svg',
       badge: 'חדש',
       badgeColor: 'bg-green-500',
       inStock: true
@@ -54,7 +49,7 @@ export const ProductGrid = ({ selectedCategory, priceRange }: ProductGridProps) 
       originalPrice: 249,
       rating: 4.6,
       reviews: 127,
-      image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=300&fit=crop',
+      image: '/placeholder.svg',
       badge: 'חיסכון',
       badgeColor: 'bg-blue-500',
       inStock: true
@@ -67,7 +62,7 @@ export const ProductGrid = ({ selectedCategory, priceRange }: ProductGridProps) 
       originalPrice: 99,
       rating: 4.5,
       reviews: 89,
-      image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=300&fit=crop',
+      image: '/placeholder.svg',
       badge: 'מבצע',
       badgeColor: 'bg-orange-500',
       inStock: false
@@ -80,7 +75,7 @@ export const ProductGrid = ({ selectedCategory, priceRange }: ProductGridProps) 
       originalPrice: null,
       rating: 4.7,
       reviews: 201,
-      image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=300&fit=crop',
+      image: '/placeholder.svg',
       badge: null,
       badgeColor: '',
       inStock: true
@@ -93,7 +88,7 @@ export const ProductGrid = ({ selectedCategory, priceRange }: ProductGridProps) 
       originalPrice: 59,
       rating: 4.4,
       reviews: 76,
-      image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=300&fit=crop',
+      image: '/placeholder.svg',
       badge: 'בסיסי',
       badgeColor: 'bg-gray-500',
       inStock: true
@@ -125,30 +120,14 @@ export const ProductGrid = ({ selectedCategory, priceRange }: ProductGridProps) 
     }
 
     return products;
-  }, [selectedCategory, priceRange, sortBy]);
+  }, [selectedCategory, priceRange, sortBy, allProducts]);
 
-  const handleAddToCart = (product: any) => {
-    addToCart(product);
-    toast({
-      title: "הוספת מוצר לעגלה",
-      description: `${product.name} נוסף לעגלה בהצלחה!`,
-    });
-  };
-
-  const toggleWishlist = (product: any) => {
-    if (isInWishlist(product.id)) {
-      removeFromWishlist(product.id);
-      toast({
-        title: "הוסר מרשימת המשאלות",
-        description: `${product.name} הוסר מרשימת המשאלות`,
-      });
-    } else {
-      addToWishlist(product);
-      toast({
-        title: "נוסף לרשימת המשאלות",
-        description: `${product.name} נוסף לרשימת המשאלות`,
-      });
-    }
+  const toggleWishlist = (productId: number) => {
+    setWishlist(prev => 
+      prev.includes(productId) 
+        ? prev.filter(id => id !== productId)
+        : [...prev, productId]
+    );
   };
 
   return (
@@ -165,7 +144,7 @@ export const ProductGrid = ({ selectedCategory, priceRange }: ProductGridProps) 
         <select 
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
-          className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+          className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         >
           <option value="popular">הכי פופולריים</option>
           <option value="rating">דירוג הגבוה ביותר</option>
@@ -200,16 +179,16 @@ export const ProductGrid = ({ selectedCategory, priceRange }: ProductGridProps) 
                 variant="ghost"
                 size="sm"
                 className={`absolute top-2 left-2 w-8 h-8 rounded-full p-0 bg-white/80 hover:bg-white ${
-                  isInWishlist(product.id) ? 'text-red-500' : 'text-gray-400'
+                  wishlist.includes(product.id) ? 'text-red-500' : 'text-gray-400'
                 }`}
-                onClick={() => toggleWishlist(product)}
+                onClick={() => toggleWishlist(product.id)}
               >
-                <Heart className={`w-4 h-4 ${isInWishlist(product.id) ? 'fill-current' : ''}`} />
+                <Heart className={`w-4 h-4 ${wishlist.includes(product.id) ? 'fill-current' : ''}`} />
               </Button>
             </div>
 
             <div className="p-4">
-              <h3 className="font-semibold text-lg text-gray-900 mb-2 group-hover:text-emerald-600 transition-colors">
+              <h3 className="font-semibold text-lg text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
                 {product.name}
               </h3>
               
@@ -245,9 +224,8 @@ export const ProductGrid = ({ selectedCategory, priceRange }: ProductGridProps) 
               </div>
 
               <Button 
-                className="w-full bg-gradient-primary hover:bg-gradient-primary-hover text-white font-semibold"
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold"
                 disabled={!product.inStock}
-                onClick={() => handleAddToCart(product)}
               >
                 <ShoppingCart className="w-4 h-4 ml-2" />
                 {product.inStock ? 'הוסף לעגלה' : 'אזל מהמלאי'}
