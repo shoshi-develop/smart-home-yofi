@@ -31,13 +31,13 @@ export const Hero = () => {
   return (
     <div className="relative overflow-hidden">
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-600 via-teal-600 to-sky-800"></div>
       
       {/* Animated background elements */}
       <div className="absolute inset-0">
         <div className="absolute top-20 left-10 w-32 h-32 bg-white/10 rounded-full blur-xl animate-pulse"></div>
-        <div className="absolute top-40 right-20 w-20 h-20 bg-purple-300/20 rounded-full blur-lg animate-pulse delay-1000"></div>
-        <div className="absolute bottom-20 left-1/3 w-40 h-40 bg-blue-300/10 rounded-full blur-2xl animate-pulse delay-2000"></div>
+        <div className="absolute top-40 right-20 w-20 h-20 bg-emerald-300/20 rounded-full blur-lg animate-pulse delay-1000"></div>
+        <div className="absolute bottom-20 left-1/3 w-40 h-40 bg-sky-300/10 rounded-full blur-2xl animate-pulse delay-2000"></div>
       </div>
 
       <div className="relative container mx-auto px-4 py-20">
@@ -48,18 +48,18 @@ export const Hero = () => {
               של העתיד
             </span>
           </h1>
-          <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-3xl mx-auto">
+          <p className="text-xl md:text-2xl mb-8 text-emerald-100 max-w-3xl mx-auto">
             גלה את האוסף המקיף ביותר של מוצרי בית חכם בישראל. 
             טכנולוגיה מתקדמת, התקנה פשוטה, שירות מקצועי.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/products">
-              <Button size="lg" className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-3 text-lg">
+              <Button size="lg" className="bg-white text-emerald-600 hover:bg-emerald-50 font-semibold px-8 py-3 text-lg">
                 צפה במוצרים
               </Button>
             </Link>
             <Link to="/custom-service">
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 font-semibold px-8 py-3 text-lg">
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-emerald-600 font-semibold px-8 py-3 text-lg">
                 התאמה אישית
               </Button>
             </Link>
@@ -77,7 +77,7 @@ export const Hero = () => {
                     <Icon className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                  <p className="text-blue-100 text-sm">{feature.description}</p>
+                  <p className="text-emerald-100 text-sm">{feature.description}</p>
                 </div>
               </Card>
             );
