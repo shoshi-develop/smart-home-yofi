@@ -143,7 +143,9 @@ export const CustomServiceForm = () => {
     const newErrors: Record<string, string> = {};
 
     requiredFields.forEach(field => {
-      if (!formData[field as keyof typeof formData].trim()) {
+      const fieldValue = formData[field as keyof typeof formData];
+      // Fix: Check if the value is a string before calling trim()
+      if (typeof fieldValue === 'string' && !fieldValue.trim()) {
         newErrors[field] = 'שדה זה הוא חובה';
       }
     });
