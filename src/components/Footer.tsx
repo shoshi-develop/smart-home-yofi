@@ -20,10 +20,10 @@ export const Footer = () => {
   ];
 
   const support = [
-    { name: 'שירות לקוחות', href: '/customer-service' },
-    { name: 'אחריות', href: '/warranty' },
-    { name: 'החזרות', href: '/returns' },
-    { name: 'שאלות נפוצות', href: '/faq' }
+    { name: 'שירות לקוחות', href: '#' },
+    { name: 'אחריות', href: '#' },
+    { name: 'החזרות', href: '#' },
+    { name: 'שאלות נפוצות', href: '#' }
   ];
 
   return (
@@ -33,7 +33,7 @@ export const Footer = () => {
           {/* Company Info */}
           <div>
             <div className="flex items-center space-x-2 rtl:space-x-reverse mb-4">
-              <div className="w-10 h-10 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
                 <Home className="w-6 h-6 text-white" />
               </div>
               <span className="text-xl font-bold">בית חכם פלוס</span>
@@ -42,13 +42,13 @@ export const Footer = () => {
               המקום הטוב ביותר למוצרי בית חכם בישראל. טכנולוגיה מתקדמת, שירות מקצועי, מחירים הוגנים.
             </p>
             <div className="flex space-x-4 rtl:space-x-reverse">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors">
+              <a href="#" className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors">
                 <Facebook className="w-5 h-5" />
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-pink-600 rounded-full flex items-center justify-center hover:bg-pink-700 transition-colors">
+              <a href="#" className="w-10 h-10 bg-pink-600 rounded-full flex items-center justify-center hover:bg-pink-700 transition-colors">
                 <Instagram className="w-5 h-5" />
               </a>
-              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center hover:bg-red-700 transition-colors">
+              <a href="#" className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center hover:bg-red-700 transition-colors">
                 <Youtube className="w-5 h-5" />
               </a>
             </div>
@@ -93,15 +93,15 @@ export const Footer = () => {
             <h3 className="text-lg font-semibold mb-4">צור קשר</h3>
             <div className="space-y-3">
               <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                <Phone className="w-5 h-5 text-emerald-400" />
-                <a href="tel:03-1234567" className="text-gray-300 hover:text-white transition-colors">03-1234567</a>
+                <Phone className="w-5 h-5 text-blue-400" />
+                <span className="text-gray-300">03-1234567</span>
               </div>
               <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                <Mail className="w-5 h-5 text-emerald-400" />
-                <a href="mailto:info@smart-home.co.il" className="text-gray-300 hover:text-white transition-colors">info@smart-home.co.il</a>
+                <Mail className="w-5 h-5 text-blue-400" />
+                <span className="text-gray-300">info@smart-home.co.il</span>
               </div>
               <div className="flex items-center space-x-3 rtl:space-x-reverse">
-                <MapPin className="w-5 h-5 text-emerald-400" />
+                <MapPin className="w-5 h-5 text-blue-400" />
                 <span className="text-gray-300">תל אביב, ישראל</span>
               </div>
             </div>
@@ -114,13 +114,13 @@ export const Footer = () => {
             © {currentYear} בית חכם פלוס. כל הזכויות שמורות.
           </p>
           <div className="flex space-x-6 rtl:space-x-reverse mt-4 md:mt-0">
-            <Link to="/terms" className="text-gray-400 hover:text-white text-sm transition-colors">
+            <Link to="#" className="text-gray-400 hover:text-white text-sm transition-colors">
               תנאי שימוש
             </Link>
-            <Link to="/privacy" className="text-gray-400 hover:text-white text-sm transition-colors">
+            <Link to="#" className="text-gray-400 hover:text-white text-sm transition-colors">
               מדיניות פרטיות
             </Link>
-            <Link to="/cookies" className="text-gray-400 hover:text-white text-sm transition-colors">
+            <Link to="#" className="text-gray-400 hover:text-white text-sm transition-colors">
               עוגיות
             </Link>
           </div>

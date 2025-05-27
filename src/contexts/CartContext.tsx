@@ -36,12 +36,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const savedCart = localStorage.getItem('cart');
     if (savedCart) {
-      try {
-        setItems(JSON.parse(savedCart));
-      } catch (error) {
-        console.error('Error loading cart from localStorage:', error);
-        setItems([]);
-      }
+      setItems(JSON.parse(savedCart));
     }
   }, []);
 
@@ -51,7 +46,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [items]);
 
   const addToCart = (product: any) => {
-    console.log('Adding to cart:', product);
     setItems(prev => {
       const existingItem = prev.find(item => item.id === product.id);
       if (existingItem) {
@@ -72,12 +66,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const removeFromCart = (productId: number) => {
-    console.log('Removing from cart:', productId);
     setItems(prev => prev.filter(item => item.id !== productId));
   };
 
   const updateQuantity = (productId: number, quantity: number) => {
-    console.log('Updating quantity:', productId, quantity);
     if (quantity <= 0) {
       removeFromCart(productId);
       return;
