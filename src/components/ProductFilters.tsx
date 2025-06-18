@@ -3,48 +3,54 @@ import { Card } from '@/components/ui/card';
 import { Slider } from '@/components/ui/slider';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface ProductFiltersProps {
   selectedCategory: string;
   setSelectedCategory: (category: string) => void;
   priceRange: number[];
   setPriceRange: (range: number[]) => void;
+  selectedBrands: string[];
+  setSelectedBrands: (brands: string[]) => void;
+  selectedFeatures: string[];
+  setSelectedFeatures: (features: string[]) => void;
 }
 
 export const ProductFilters = ({ 
   selectedCategory, 
   setSelectedCategory, 
   priceRange, 
-  setPriceRange 
+  setPriceRange,
+  selectedBrands,
+  setSelectedBrands,
+  selectedFeatures,
+  setSelectedFeatures
 }: ProductFiltersProps) => {
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-  const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
 
   const categories = [
-    { id: 'all', name: 'כל המוצרים', count: 106 },
-    { id: 'security', name: 'מצלמות אבטחה', count: 24 },
-    { id: 'lighting', name: 'תאורה חכמה', count: 18 },
-    { id: 'climate', name: 'בקרת אקלים', count: 15 },
-    { id: 'audio', name: 'אודיו חכם', count: 12 },
-    { id: 'entertainment', name: 'בידור חכם', count: 16 },
-    { id: 'security-systems', name: 'מערכות אבטחה', count: 21 }
+    { id: 'all', name: 'כל המוצרים', count: 14 },
+    { id: 'security', name: 'מצלמות אבטחה', count: 2 },
+    { id: 'lighting', name: 'תאורה חכמה', count: 3 },
+    { id: 'climate', name: 'בקרת אקלים', count: 2 },
+    { id: 'audio', name: 'אודיו חכם', count: 2 },
+    { id: 'entertainment', name: 'בידור חכם', count: 2 },
+    { id: 'security-systems', name: 'מערכות אבטחה', count: 3 }
   ];
 
   const brands = [
-    { id: 'xiaomi', name: 'Xiaomi', count: 23 },
-    { id: 'philips', name: 'Philips Hue', count: 18 },
-    { id: 'amazon', name: 'Amazon', count: 15 },
-    { id: 'google', name: 'Google', count: 12 },
-    { id: 'apple', name: 'Apple', count: 8 }
+    { id: 'xiaomi', name: 'Xiaomi', count: 6 },
+    { id: 'philips', name: 'Philips Hue', count: 2 },
+    { id: 'amazon', name: 'Amazon', count: 3 },
+    { id: 'google', name: 'Google', count: 2 },
+    { id: 'apple', name: 'Apple', count: 1 }
   ];
 
   const features = [
-    { id: 'wifi', name: 'WiFi', count: 67 },
-    { id: 'voice', name: 'שליטה קולית', count: 45 },
-    { id: 'app', name: 'אפליקציה', count: 89 },
-    { id: 'night-vision', name: 'ראיית לילה', count: 23 },
-    { id: 'waterproof', name: 'עמיד למים', count: 34 }
+    { id: 'wifi', name: 'WiFi', count: 14 },
+    { id: 'voice', name: 'שליטה קולית', count: 6 },
+    { id: 'app', name: 'אפליקציה', count: 14 },
+    { id: 'night-vision', name: 'ראיית לילה', count: 2 },
+    { id: 'waterproof', name: 'עמיד למים', count: 1 }
   ];
 
   const handleClearFilters = () => {
@@ -55,18 +61,18 @@ export const ProductFilters = ({
   };
 
   const toggleBrand = (brandId: string) => {
-    setSelectedBrands(prev => 
-      prev.includes(brandId)
-        ? prev.filter(id => id !== brandId)
-        : [...prev, brandId]
+    setSelectedBrands(
+      selectedBrands.includes(brandId)
+        ? selectedBrands.filter(id => id !== brandId)
+        : [...selectedBrands, brandId]
     );
   };
 
   const toggleFeature = (featureId: string) => {
-    setSelectedFeatures(prev => 
-      prev.includes(featureId)
-        ? prev.filter(id => id !== featureId)
-        : [...prev, featureId]
+    setSelectedFeatures(
+      selectedFeatures.includes(featureId)
+        ? selectedFeatures.filter(id => id !== featureId)
+        : [...selectedFeatures, featureId]
     );
   };
 
@@ -102,10 +108,11 @@ export const ProductFilters = ({
           <Slider
             value={priceRange}
             onValueChange={setPriceRange}
-            max={5000}
+            max={3000}
             min={0}
             step={50}
             className="w-full"
+            dir="ltr"
           />
           <div className="flex justify-between text-sm text-gray-600">
             <span>₪{priceRange[0]}</span>

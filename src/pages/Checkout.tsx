@@ -32,10 +32,18 @@ const Checkout = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Convert CartItem to OrderItem format
+    const orderItems = items.map(item => ({
+      id: item.id.toString(),
+      name: item.name,
+      price: item.price,
+      quantity: item.quantity
+    }));
+
     const newOrder = {
       id: Date.now().toString(),
       userId: currentUser?.id || '',
-      items: items,
+      items: orderItems,
       totalAmount: getTotalPrice(),
       orderDate: new Date().toISOString(),
       deliveryDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),

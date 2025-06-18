@@ -11,15 +11,23 @@ import { useToast } from '@/hooks/use-toast';
 interface ProductGridProps {
   selectedCategory: string;
   priceRange: number[];
+  selectedBrands?: string[];
+  selectedFeatures?: string[];
 }
 
-export const ProductGrid = ({ selectedCategory, priceRange }: ProductGridProps) => {
+export const ProductGrid = ({ 
+  selectedCategory, 
+  priceRange, 
+  selectedBrands = [], 
+  selectedFeatures = [] 
+}: ProductGridProps) => {
   const [sortBy, setSortBy] = useState('popular');
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const { toast } = useToast();
 
   const allProducts = [
+    // Security Category
     {
       id: 1,
       name: 'מצלמת אבטחה חכמה Pro',
@@ -31,10 +39,44 @@ export const ProductGrid = ({ selectedCategory, priceRange }: ProductGridProps) 
       image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop',
       badge: 'פופולרי',
       badgeColor: 'bg-red-500',
-      inStock: true
+      inStock: true,
+      brand: 'xiaomi',
+      features: ['wifi', 'night-vision', 'app']
     },
     {
       id: 2,
+      name: 'מצלמת אבטחה אלחוטית 4K',
+      category: 'security',
+      price: 449,
+      originalPrice: 549,
+      rating: 4.9,
+      reviews: 203,
+      image: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&h=300&fit=crop',
+      badge: 'חדש',
+      badgeColor: 'bg-green-500',
+      inStock: true,
+      brand: 'amazon',
+      features: ['wifi', 'night-vision', 'app', 'waterproof']
+    },
+    {
+      id: 3,
+      name: 'מערכת אבטחה חכמה 8 מצלמות',
+      category: 'security-systems',
+      price: 1299,
+      originalPrice: 1599,
+      rating: 4.7,
+      reviews: 87,
+      image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=400&h=300&fit=crop',
+      badge: 'מבצע',
+      badgeColor: 'bg-orange-500',
+      inStock: true,
+      brand: 'xiaomi',
+      features: ['wifi', 'night-vision', 'app']
+    },
+    
+    // Lighting Category
+    {
+      id: 4,
       name: 'נורה חכמה RGB',
       category: 'lighting',
       price: 89,
@@ -44,46 +86,24 @@ export const ProductGrid = ({ selectedCategory, priceRange }: ProductGridProps) 
       image: 'https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?w=400&h=300&fit=crop',
       badge: 'חדש',
       badgeColor: 'bg-green-500',
-      inStock: true
-    },
-    {
-      id: 3,
-      name: 'תרמוסטט חכם WiFi',
-      category: 'climate',
-      price: 199,
-      originalPrice: 249,
-      rating: 4.6,
-      reviews: 127,
-      image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&h=300&fit=crop',
-      badge: 'חיסכון',
-      badgeColor: 'bg-blue-500',
-      inStock: true
-    },
-    {
-      id: 4,
-      name: 'חיישן תנועה חכם',
-      category: 'security',
-      price: 79,
-      originalPrice: 99,
-      rating: 4.5,
-      reviews: 89,
-      image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=400&h=300&fit=crop',
-      badge: 'מבצע',
-      badgeColor: 'bg-orange-500',
-      inStock: false
+      inStock: true,
+      brand: 'philips',
+      features: ['wifi', 'voice', 'app']
     },
     {
       id: 5,
-      name: 'רמקול חכם Amazon Echo',
-      category: 'audio',
+      name: 'רצועת LED חכמה 5 מטר',
+      category: 'lighting',
       price: 159,
-      originalPrice: null,
-      rating: 4.7,
-      reviews: 201,
-      image: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=400&h=300&fit=crop',
+      originalPrice: 199,
+      rating: 4.6,
+      reviews: 178,
+      image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=300&fit=crop',
       badge: null,
       badgeColor: '',
-      inStock: true
+      inStock: true,
+      brand: 'philips',
+      features: ['wifi', 'app']
     },
     {
       id: 6,
@@ -93,10 +113,140 @@ export const ProductGrid = ({ selectedCategory, priceRange }: ProductGridProps) 
       originalPrice: 59,
       rating: 4.4,
       reviews: 76,
-      image: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=400&h=300&fit=crop',
+      image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop',
       badge: 'בסיסי',
       badgeColor: 'bg-gray-500',
-      inStock: true
+      inStock: true,
+      brand: 'xiaomi',
+      features: ['wifi', 'app']
+    },
+    
+    // Climate Category
+    {
+      id: 7,
+      name: 'תרמוסטט חכם WiFi',
+      category: 'climate',
+      price: 199,
+      originalPrice: 249,
+      rating: 4.6,
+      reviews: 127,
+      image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&h=300&fit=crop',
+      badge: 'חיסכון',
+      badgeColor: 'bg-blue-500',
+      inStock: true,
+      brand: 'google',
+      features: ['wifi', 'voice', 'app']
+    },
+    {
+      id: 8,
+      name: 'מזגן חכם 12000 BTU',
+      category: 'climate',
+      price: 1599,
+      originalPrice: 1899,
+      rating: 4.8,
+      reviews: 94,
+      image: 'https://images.unsplash.com/photo-1631545806603-0c531302f40b?w=400&h=300&fit=crop',
+      badge: 'פופולרי',
+      badgeColor: 'bg-red-500',
+      inStock: true,
+      brand: 'xiaomi',
+      features: ['wifi', 'voice', 'app']
+    },
+    
+    // Audio Category
+    {
+      id: 9,
+      name: 'רמקול חכם Amazon Echo',
+      category: 'audio',
+      price: 159,
+      originalPrice: null,
+      rating: 4.7,
+      reviews: 201,
+      image: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=400&h=300&fit=crop',
+      badge: null,
+      badgeColor: '',
+      inStock: true,
+      brand: 'amazon',
+      features: ['wifi', 'voice', 'app']
+    },
+    {
+      id: 10,
+      name: 'רמקול Google Home Mini',
+      category: 'audio',
+      price: 129,
+      originalPrice: 159,
+      rating: 4.5,
+      reviews: 167,
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop',
+      badge: 'מבצע',
+      badgeColor: 'bg-orange-500',
+      inStock: true,
+      brand: 'google',
+      features: ['wifi', 'voice', 'app']
+    },
+    
+    // Entertainment Category
+    {
+      id: 11,
+      name: 'Apple TV 4K',
+      category: 'entertainment',
+      price: 599,
+      originalPrice: 699,
+      rating: 4.9,
+      reviews: 145,
+      image: 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&h=300&fit=crop',
+      badge: 'פרימיום',
+      badgeColor: 'bg-purple-500',
+      inStock: true,
+      brand: 'apple',
+      features: ['wifi', 'app']
+    },
+    {
+      id: 12,
+      name: 'טלוויזיה חכמה 55 אינץ',
+      category: 'entertainment',
+      price: 2199,
+      originalPrice: 2599,
+      rating: 4.6,
+      reviews: 76,
+      image: 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400&h=300&fit=crop',
+      badge: 'גדול',
+      badgeColor: 'bg-indigo-500',
+      inStock: true,
+      brand: 'xiaomi',
+      features: ['wifi', 'voice', 'app']
+    },
+    
+    // Security Systems Category
+    {
+      id: 13,
+      name: 'חיישن תנועה חכם',
+      category: 'security-systems',
+      price: 79,
+      originalPrice: 99,
+      rating: 4.5,
+      reviews: 89,
+      image: 'https://images.unsplash.com/photo-1614332287897-cdc485fa562d?w=400&h=300&fit=crop',
+      badge: 'מבצע',
+      badgeColor: 'bg-orange-500',
+      inStock: false,
+      brand: 'xiaomi',
+      features: ['wifi', 'app']
+    },
+    {
+      id: 14,
+      name: 'מערכת אזעקה חכמה',
+      category: 'security-systems',
+      price: 399,
+      originalPrice: 499,
+      rating: 4.7,
+      reviews: 112,
+      image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=300&fit=crop',
+      badge: 'אמין',
+      badgeColor: 'bg-green-600',
+      inStock: true,
+      brand: 'amazon',
+      features: ['wifi', 'app']
     }
   ];
 
@@ -104,7 +254,12 @@ export const ProductGrid = ({ selectedCategory, priceRange }: ProductGridProps) 
     let products = allProducts.filter(product => {
       const categoryMatch = selectedCategory === 'all' || product.category === selectedCategory;
       const priceMatch = product.price >= priceRange[0] && product.price <= priceRange[1];
-      return categoryMatch && priceMatch;
+      
+      const brandMatch = selectedBrands.length === 0 || selectedBrands.includes(product.brand);
+      const featureMatch = selectedFeatures.length === 0 || 
+        selectedFeatures.some(feature => product.features.includes(feature));
+      
+      return categoryMatch && priceMatch && brandMatch && featureMatch;
     });
 
     // Sort products
@@ -125,7 +280,7 @@ export const ProductGrid = ({ selectedCategory, priceRange }: ProductGridProps) 
     }
 
     return products;
-  }, [selectedCategory, priceRange, sortBy]);
+  }, [selectedCategory, priceRange, sortBy, selectedBrands, selectedFeatures]);
 
   const handleAddToCart = (product: any) => {
     addToCart(product);

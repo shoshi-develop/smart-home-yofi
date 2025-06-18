@@ -11,7 +11,7 @@ export const Categories = () => {
       icon: Camera,
       description: 'מערכות אבטחה חכמות לבית',
       color: 'from-red-500 to-red-600',
-      products: 24
+      products: 2
     },
     {
       id: 'lighting',
@@ -19,7 +19,7 @@ export const Categories = () => {
       icon: Lightbulb,
       description: 'נורות וגופי תאורה חכמים',
       color: 'from-yellow-500 to-orange-500',
-      products: 18
+      products: 3
     },
     {
       id: 'climate',
@@ -27,7 +27,7 @@ export const Categories = () => {
       icon: Thermometer,
       description: 'מזגנים וחימום חכם',
       color: 'from-blue-500 to-cyan-500',
-      products: 15
+      products: 2
     },
     {
       id: 'security-systems',
@@ -35,7 +35,7 @@ export const Categories = () => {
       icon: Shield,
       description: 'אזעקות וחיישנים',
       color: 'from-green-500 to-emerald-500',
-      products: 21
+      products: 3
     },
     {
       id: 'audio',
@@ -43,7 +43,7 @@ export const Categories = () => {
       icon: Speaker,
       description: 'רמקולים ומערכות שמע',
       color: 'from-purple-500 to-violet-500',
-      products: 12
+      products: 2
     },
     {
       id: 'entertainment',
@@ -51,7 +51,7 @@ export const Categories = () => {
       icon: Tv,
       description: 'טלוויזיות ומדיה',
       color: 'from-indigo-500 to-blue-600',
-      products: 16
+      products: 2
     }
   ];
 
@@ -71,7 +71,7 @@ export const Categories = () => {
           {categories.map((category) => {
             const Icon = category.icon;
             return (
-              <Link key={category.id} to={`/products?category=${category.id}`}>
+              <Link key={category.id} to={`/products`} state={{ category: category.id }}>
                 <Card className="group hover:shadow-2xl transition-all duration-300 hover:scale-105 overflow-hidden">
                   <div className={`h-32 bg-gradient-to-r ${category.color} relative`}>
                     <div className="absolute inset-0 bg-black/10"></div>
