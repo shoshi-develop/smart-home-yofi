@@ -26,6 +26,7 @@ export const CustomServiceForm = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [selectedServicesTotal, setSelectedServicesTotal] = useState(0);
   const [budgetExceeded, setBudgetExceeded] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const services = [
     { id: 'security', name: 'מערכת אבטחה מלאה', price: 1200, displayPrice: 'החל מ-₪1,200' },
@@ -144,7 +145,6 @@ export const CustomServiceForm = () => {
 
     requiredFields.forEach(field => {
       const fieldValue = formData[field as keyof typeof formData];
-      // Fix: Check if the value is a string before calling trim()
       if (typeof fieldValue === 'string' && !fieldValue.trim()) {
         newErrors[field] = 'שדה זה הוא חובה';
       }
@@ -158,36 +158,53 @@ export const CustomServiceForm = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!validateForm()) {
+    if (isSubmitting) return;
+    
+    setIsSubmitting(true);
+    
+    try {
+      if (!validateForm()) {
+        toast({
+          title: "שגיאה בטופס",
+          description: "אנא תקן את השגיאות בטופס ונסה שוב",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Simulate form submission
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
       toast({
-        title: "שגיאה בטופס",
-        description: "אנא תקן את השגיאות בטופס ונסה שוב",
+        title: "הבקשה נשלחה בהצלחה! 🎉",
+        description: "נחזור אליך תוך 24 שעות עם הצעת מחיר מפורטת. תודה שבחרת בנו!",
+      });
+
+      // Reset form
+      setFormData({
+        name: '',
+        phone: '',
+        email: '',
+        address: '',
+        homeSize: '',
+        budget: '',
+        services: [],
+        timeline: '',
+        description: ''
+      });
+      setErrors({});
+    } catch (error) {
+      toast({
+        title: "שגיאה בשליחת הטופס",
+        description: "אנא נסה שוב או צור קשר ישירות",
         variant: "destructive"
       });
-      return;
+    } finally {
+      setIsSubmitting(false);
     }
-
-    // Form submission success
-    toast({
-      title: "הבקשה נשלחה בהצלחה! 🎉",
-      description: "נחזור אליך תוך 24 שעות עם הצעת מחיר מפורטת. תודה שבחרת בנו!",
-    });
-
-    // Reset form
-    setFormData({
-      name: '',
-      phone: '',
-      email: '',
-      address: '',
-      homeSize: '',
-      budget: '',
-      services: [],
-      timeline: '',
-      description: ''
-    });
   };
 
   return (
@@ -239,6 +256,7 @@ export const CustomServiceForm = () => {
                   onChange={handleInputChange}
                   placeholder="הכנס את שמך המלא"
                   className={errors.name ? 'border-red-500' : ''}
+                  disabled={isSubmitting}
                 />
                 {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
               </div>
@@ -255,6 +273,7 @@ export const CustomServiceForm = () => {
                     onChange={handleInputChange}
                     placeholder="050-1234567"
                     className={errors.phone ? 'border-red-500' : ''}
+                    disabled={isSubmitting}
                   />
                   {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
                 </div>
@@ -269,6 +288,7 @@ export const CustomServiceForm = () => {
                     onChange={handleInputChange}
                     placeholder="example@email.com"
                     className={errors.email ? 'border-red-500' : ''}
+                    disabled={isSubmitting}
                   />
                   {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                 </div>
@@ -284,6 +304,7 @@ export const CustomServiceForm = () => {
                   onChange={handleInputChange}
                   placeholder="רחוב, מספר בית, עיר"
                   className={errors.address ? 'border-red-500' : ''}
+                  disabled={isSubmitting}
                 />
                 {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
               </div>
@@ -305,6 +326,7 @@ export const CustomServiceForm = () => {
                     placeholder="כמה מטרים רבועים"
                     type="number"
                     className={errors.homeSize ? 'border-red-500' : ''}
+                    disabled={isSubmitting}
                   />
                   {errors.homeSize && <p className="text-red-500 text-sm mt-1">{errors.homeSize}</p>}
                 </div>
@@ -317,6 +339,7 @@ export const CustomServiceForm = () => {
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                     value={formData.budget}
                     onChange={handleInputChange}
+                    disabled={isSubmitting}
                   >
                     <option value="">בחר תקציב</option>
                     <option value="1000-3000">₪1,000 - ₪3,000</option>
@@ -341,6 +364,7 @@ export const CustomServiceForm = () => {
                         checked={formData.timeline === option}
                         onChange={handleInputChange}
                         className="w-4 h-4 text-emerald-600"
+                        disabled={isSubmitting}
                       />
                       <span className="text-sm text-gray-700">{option}</span>
                     </label>
@@ -377,14 +401,14 @@ export const CustomServiceForm = () => {
                       formData.services.includes(service.id)
                         ? 'border-emerald-500 bg-emerald-50'
                         : 'border-gray-200 hover:border-gray-300'
-                    }`}
-                    onClick={() => handleServiceToggle(service.id)}
+                    } ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    onClick={() => !isSubmitting && handleServiceToggle(service.id)}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3 rtl:space-x-reverse">
                         <Checkbox 
                           checked={formData.services.includes(service.id)}
-                          onChange={() => handleServiceToggle(service.id)}
+                          disabled={isSubmitting}
                         />
                         <div>
                           <span className="font-medium text-gray-900">{service.name}</span>
@@ -409,14 +433,16 @@ export const CustomServiceForm = () => {
                 onChange={handleInputChange}
                 placeholder="תאר את הצרכים הספציפיים שלך, חדרים שברצונך לחבר, או כל דרישה מיוחדת..."
                 rows={4}
+                disabled={isSubmitting}
               />
             </div>
 
             <Button 
               type="submit" 
+              disabled={isSubmitting}
               className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold py-3"
             >
-              שלח בקשה לייעוץ חינם
+              {isSubmitting ? 'שולח...' : 'שלח בקשה לייעוץ חינם'}
             </Button>
           </form>
         </Card>

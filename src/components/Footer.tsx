@@ -13,10 +13,10 @@ export const Footer = () => {
   ];
 
   const categories = [
-    { name: 'מצלמות אבטחה', href: '/products?category=security' },
-    { name: 'תאורה חכמה', href: '/products?category=lighting' },
-    { name: 'בקרת אקלים', href: '/products?category=climate' },
-    { name: 'אודיו חכם', href: '/products?category=audio' }
+    { name: 'מצלמות אבטחה', href: '/products', state: { category: 'security' } },
+    { name: 'תאורה חכמה', href: '/products', state: { category: 'lighting' } },
+    { name: 'בקרת אקלים', href: '/products', state: { category: 'climate' } },
+    { name: 'אודיו חכם', href: '/products', state: { category: 'audio' } }
   ];
 
   const support = [
@@ -78,7 +78,8 @@ export const Footer = () => {
               {categories.map(category => (
                 <li key={category.name}>
                   <Link 
-                    to={category.href} 
+                    to={category.href}
+                    state={category.state}
                     className="text-gray-300 hover:text-white transition-colors"
                   >
                     {category.name}

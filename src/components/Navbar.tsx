@@ -25,7 +25,7 @@ export const Navbar = () => {
   const adminNavigation = [
     { name: 'רשימת מוצרים', href: '/products', icon: Package },
     { name: 'הוספת מוצר', href: '/add-product', icon: Plus },
-    { name: 'הזמנות', href: '/orders', icon: ShoppingBag },
+    { name: 'ניהול הזמנות', href: '/admin/orders', icon: ShoppingBag },
     { name: 'משתמשים', href: '/users', icon: Users },
     { name: 'פוסטים', href: '/posts', icon: FileText },
   ];

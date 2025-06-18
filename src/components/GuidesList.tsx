@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -98,7 +97,7 @@ export const GuidesList = () => {
       views: 3120,
       image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop',
       hasVideo: true,
-      hasDownload: false,
+      hasDownload: true,
       tags: ['אודיו', 'Alexa', 'קול'],
       content: `
 # חיבור רמקול חכם Amazon Echo
@@ -126,7 +125,7 @@ export const GuidesList = () => {
     },
     {
       id: 4,
-      title: 'הגדרת מערכת אזעקה חכמה',
+      title: 'הגדרכת אזעקה חכמה',
       description: 'התקנה והגדרה של מערכת אזעקה חכמה כוללת חיישנים ומצלמות',
       category: 'אבטחה',
       difficulty: 'מתקדם',
@@ -209,7 +208,7 @@ export const GuidesList = () => {
       views: 2156,
       image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop',
       hasVideo: true,
-      hasDownload: false,
+      hasDownload: true,
       tags: ['Google', 'אוטומציה', 'מתקדם'],
       content: `
 # אוטומציות חכמות עם Google Home
@@ -232,7 +231,7 @@ export const GuidesList = () => {
 ## שלב 4: אופטימיזציה
 1. נטר ביצועים
 2. התאם לפי השימוש
-3. עדכן רוטינות בהתאם
+3. עדכן רוטנות בהתאם
       `
     }
   ];
@@ -367,15 +366,14 @@ export const GuidesList = () => {
                   </DialogContent>
                 </Dialog>
                 
-                {guide.hasDownload && (
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => handleDownload(guide)}
-                  >
-                    <Download className="w-4 h-4" />
-                  </Button>
-                )}
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => handleDownload(guide)}
+                  title="הורד מדריך"
+                >
+                  <Download className="w-4 h-4" />
+                </Button>
               </div>
             </div>
           </Card>
