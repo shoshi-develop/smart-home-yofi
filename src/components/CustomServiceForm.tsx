@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 
 export const CustomServiceForm = () => {
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -26,7 +27,6 @@ export const CustomServiceForm = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [selectedServicesTotal, setSelectedServicesTotal] = useState(0);
   const [budgetExceeded, setBudgetExceeded] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const services = [
     { id: 'security', name: 'מערכת אבטחה מלאה', price: 1200, displayPrice: 'החל מ-₪1,200' },
@@ -131,6 +131,8 @@ export const CustomServiceForm = () => {
   };
 
   const handleServiceToggle = (serviceId: string) => {
+    if (isSubmitting) return;
+    
     setFormData(prev => ({
       ...prev,
       services: prev.services.includes(serviceId)
@@ -163,9 +165,9 @@ export const CustomServiceForm = () => {
     
     if (isSubmitting) return;
     
-    setIsSubmitting(true);
-    
     try {
+      setIsSubmitting(true);
+      
       if (!validateForm()) {
         toast({
           title: "שגיאה בטופס",
@@ -197,6 +199,7 @@ export const CustomServiceForm = () => {
       });
       setErrors({});
     } catch (error) {
+      console.error('Form submission error:', error);
       toast({
         title: "שגיאה בשליחת הטופס",
         description: "אנא נסה שוב או צור קשר ישירות",
@@ -402,13 +405,14 @@ export const CustomServiceForm = () => {
                         ? 'border-emerald-500 bg-emerald-50'
                         : 'border-gray-200 hover:border-gray-300'
                     } ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    onClick={() => !isSubmitting && handleServiceToggle(service.id)}
+                    onClick={() => handleServiceToggle(service.id)}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3 rtl:space-x-reverse">
                         <Checkbox 
                           checked={formData.services.includes(service.id)}
                           disabled={isSubmitting}
+                          onCheckedChange={() => handleServiceToggle(service.id)}
                         />
                         <div>
                           <span className="font-medium text-gray-900">{service.name}</span>

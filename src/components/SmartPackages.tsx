@@ -46,7 +46,9 @@ export const SmartPackages = () => {
         '4 חיישני דלתות',
         'חיישן תנועה חכם',
         'התראות בזמן אמת',
-        'אחסון ענן חינם לשנה'
+        'אחסון ענן חינם לשנה',
+        'מתג חכם',
+        'אפליקציה חכמה'
       ],
       includes: 8,
       installation: 'מקצועית כלולה'
@@ -63,13 +65,20 @@ export const SmartPackages = () => {
       badgeColor: 'bg-purple-500',
       features: [
         '4 מצלמות אבטחה 4K',
-        'תאורה חכמה לכל הבית',
+        'תאורה חכמה לכל הבית (6 נורות)',
         'מערכת אבטחה מלאה',
         'בקרת אקלים חכמה',
         'רמקולים חכמים',
         'מערכת השקיה חכמה',
         'שירות תמיכה VIP',
-        'אחריות מורחבת 3 שנים'
+        'אחריות מורחבת 3 שנים',
+        '8 מתגים חכמים',
+        'חיישני תנועה (4 יחידות)',
+        'מערכת ניהול אנרגיה',
+        'אפליקציה חכמה',
+        'התקנה מקצועית',
+        'הדרכה מקצועית',
+        'תמיכה שנתית'
       ],
       includes: 15,
       installation: 'התקנה מקצועית + הדרכה'
@@ -155,20 +164,20 @@ export const SmartPackages = () => {
                 <div className="mb-6">
                   <div className="flex items-baseline mb-2">
                     <span className="text-3xl font-bold text-gray-900">
-                      ₪{package_item.price}
+                      ₪{package_item.price.toLocaleString()}
                     </span>
                     <span className="text-xl text-gray-500 line-through mr-2">
-                      ₪{package_item.originalPrice}
+                      ₪{package_item.originalPrice.toLocaleString()}
                     </span>
                   </div>
                   <p className="text-sm text-green-600 font-semibold">
-                    חיסכון של ₪{package_item.originalPrice - package_item.price}
+                    חיסכון של ₪{(package_item.originalPrice - package_item.price).toLocaleString()}
                   </p>
                 </div>
 
                 <div className="mb-6">
                   <h4 className="font-semibold text-gray-900 mb-3">כלול בחבילה:</h4>
-                  <ul className="space-y-2">
+                  <ul className="space-y-2 max-h-48 overflow-y-auto">
                     {package_item.features.map((feature, featureIndex) => (
                       <li key={featureIndex} className="flex items-center text-sm text-gray-600">
                         <Check className="w-4 h-4 text-green-500 ml-2 flex-shrink-0" />

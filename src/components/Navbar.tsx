@@ -2,12 +2,13 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { ShoppingCart, Menu, X, Home, Package, BookOpen, Settings, LogIn, LogOut, User, FileText, Plus, Users, ShoppingBag } from 'lucide-react';
+import { ShoppingCart, Menu, X, Home, Package, BookOpen, Settings, LogIn, LogOut, User, FileText, Plus, Users, ShoppingBag, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
 import { logout } from '@/store/slices/authSlice';
 import { RootState } from '@/store/store';
+import { useWishlist } from '@/contexts/WishlistContext';
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,6 +16,7 @@ export const Navbar = () => {
   const dispatch = useDispatch();
   const { user, isLoggedIn, isAdmin } = useAuth();
   const cartItems = useSelector((state: RootState) => state.cart.items.length);
+  const { items: wishlistItems } = useWishlist();
 
   const handleLogout = () => {
     dispatch(logout());
@@ -34,6 +36,7 @@ export const Navbar = () => {
   const userNavigation = [
     { name: 'רשימת מוצרים', href: '/products', icon: Package },
     { name: 'ההזמנות שלי', href: '/my-orders', icon: ShoppingBag },
+    { name: 'רשימת משאלות', href: '/wishlist', icon: Heart },
     { name: 'סל קניות', href: '/cart', icon: ShoppingCart },
     { name: 'פוסטים', href: '/posts', icon: FileText },
   ];
@@ -88,16 +91,28 @@ export const Navbar = () => {
           {/* User Actions */}
           <div className="flex items-center space-x-4 rtl:space-x-reverse">
             {isLoggedIn && !isAdmin && (
-              <Button variant="outline" size="sm" className="relative" asChild>
-                <Link to="/cart">
-                  <ShoppingCart className="w-4 h-4" />
-                  {cartItems > 0 && (
-                    <Badge className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs bg-blue-600">
-                      {cartItems}
-                    </Badge>
-                  )}
-                </Link>
-              </Button>
+              <>
+                <Button variant="outline" size="sm" className="relative" asChild>
+                  <Link to="/wishlist">
+                    <Heart className="w-4 h-4" />
+                    {wishlistItems.length > 0 && (
+                      <Badge className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs bg-red-600">
+                        {wishlistItems.length}
+                      </Badge>
+                    )}
+                  </Link>
+                </Button>
+                <Button variant="outline" size="sm" className="relative" asChild>
+                  <Link to="/cart">
+                    <ShoppingCart className="w-4 h-4" />
+                    {cartItems > 0 && (
+                      <Badge className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs bg-blue-600">
+                        {cartItems}
+                      </Badge>
+                    )}
+                  </Link>
+                </Button>
+              </>
             )}
 
             {isLoggedIn ? (

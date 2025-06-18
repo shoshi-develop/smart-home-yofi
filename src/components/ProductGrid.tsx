@@ -83,7 +83,7 @@ export const ProductGrid = ({
       originalPrice: 129,
       rating: 4.9,
       reviews: 243,
-      image: 'https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?w=400&h=300&fit=crop',
+      image: 'https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?w=400&h=300&fit=crop',
       badge: 'חדש',
       badgeColor: 'bg-green-500',
       inStock: true,
@@ -119,6 +119,21 @@ export const ProductGrid = ({
       inStock: true,
       brand: 'xiaomi',
       features: ['wifi', 'app']
+    },
+    {
+      id: 15,
+      name: 'מנורת שולחן חכמה',
+      category: 'lighting',
+      price: 179,
+      originalPrice: 220,
+      rating: 4.5,
+      reviews: 92,
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop',
+      badge: 'חדש',
+      badgeColor: 'bg-green-500',
+      inStock: true,
+      brand: 'philips',
+      features: ['wifi', 'voice', 'app']
     },
     
     // Climate Category
@@ -220,7 +235,7 @@ export const ProductGrid = ({
     // Security Systems Category
     {
       id: 13,
-      name: 'חיישن תנועה חכם',
+      name: 'חיישן תנועה חכם',
       category: 'security-systems',
       price: 79,
       originalPrice: 99,

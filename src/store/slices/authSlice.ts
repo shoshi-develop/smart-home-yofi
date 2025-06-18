@@ -51,21 +51,23 @@ const authSlice = createSlice({
     login: (state, action: PayloadAction<{ username: string; password: string }>) => {
       const { username, password } = action.payload;
       
-      // בדיקה אם המשתמש קיים
-      const user = state.users.find(u => u.username === username);
+      // Check if user exists
+      let user = state.users.find(u => u.username === username);
       
       if (user) {
-        // בדיקה אם זו כניסה של מנהל
+        // Check for admin login
         if (password === ADMIN_PASSWORD) {
-          state.currentUser = { ...user, isAdmin: true };
+          // Make user admin if they use admin password
+          user.isAdmin = true;
+          state.currentUser = { ...user };
           state.isLoggedIn = true;
         } else {
-          // כניסה של משתמש רגיל - כל סיסמה מתקבלת (לצורך הדגמה)
+          // Regular user login
           state.currentUser = { ...user, isAdmin: false };
           state.isLoggedIn = true;
         }
       } else {
-        // אם המשתמש לא קיים, ניצור אותו אוטומטית
+        // Create new user if doesn't exist
         const newUser: User = {
           id: Date.now().toString(),
           username,
@@ -99,8 +101,11 @@ const authSlice = createSlice({
         }
       }
     },
+    deleteUser: (state, action: PayloadAction<string>) => {
+      state.users = state.users.filter(u => u.id !== action.payload);
+    },
   },
 });
 
-export const { login, register, logout, updateUser } = authSlice.actions;
+export const { login, register, logout, updateUser, deleteUser } = authSlice.actions;
 export default authSlice.reducer;

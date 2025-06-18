@@ -1,291 +1,296 @@
-
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Navbar } from '@/components/Navbar';
+import { Footer } from '@/components/Footer';
+import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Heart, MessageCircle, Share2, Calendar, User, Plus, Send } from 'lucide-react';
-import { RootState } from '@/store/store';
-import { likePost, addPost, deletePost } from '@/store/slices/postsSlice';
-import { useAuth } from '@/hooks/useAuth';
+import { Badge } from '@/components/ui/badge';
+import { Heart, MessageSquare, Share2, User, Calendar } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { Navbar } from '@/components/Navbar';
 
 const Posts = () => {
-  const dispatch = useDispatch();
   const { toast } = useToast();
-  const { isAdmin } = useAuth();
-  const { posts } = useSelector((state: RootState) => state.posts);
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [showComments, setShowComments] = useState<string | null>(null);
+  const [selectedPost, setSelectedPost] = useState<number | null>(null);
+  const [comments, setComments] = useState<Record<number, any[]>>({});
   const [newComment, setNewComment] = useState('');
-  const [comments, setComments] = useState<Record<string, Array<{id: string, author: string, content: string, date: string}>>>({});
-  const [newPost, setNewPost] = useState({
-    title: '',
-    content: '',
-    author: '',
-    tags: '',
-  });
+  const [commenterName, setCommenterName] = useState('');
 
-  const handleLike = (postId: string) => {
-    dispatch(likePost(postId));
-    toast({
-      title: "תודה!",
-      description: "הפוסט קיבל לייק",
-    });
-  };
-
-  const handleAddPost = () => {
-    if (newPost.title && newPost.content && newPost.author) {
-      dispatch(addPost({
-        ...newPost,
-        tags: newPost.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
-      }));
-      setNewPost({ title: '', content: '', author: '', tags: '' });
-      setShowAddForm(false);
-      toast({
-        title: "הפוסט נוסף בהצלחה",
-        description: "הפוסט החדש מופיע בראש הרשימה",
-      });
+  const posts = [
+    {
+      id: 1,
+      title: 'המדריך הכולל לבית חכם לשנת 2024',
+      excerpt: 'כל מה שצריך לדעת על התקנת מערכת בית חכם מודרנית',
+      content: 'בעולם שבו הטכנולוגיה מתפתחת במהירות, בתי חכמים הופכים ליותר ויותר נגישים...',
+      author: 'יוסי כהן',
+      date: '15 דצמבר 2024',
+      category: 'מדריכים',
+      image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=600&h=300&fit=crop',
+      likes: 45,
+      commentsCount: 12
+    },
+    {
+      id: 2,
+      title: '5 טעויות נפוצות בהתקנת מערכת אבטחה',
+      excerpt: 'איך להימנע מהטעויות הכי שכיחות בהתקנת מצלמות אבטחה',
+      content: 'התקנת מערכת אבטחה חכמה היא השקעה חשובה לבטיחות הבית...',
+      author: 'רחל לוי',
+      date: '12 דצמבר 2024',
+      category: 'אבטחה',
+      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=300&fit=crop',
+      likes: 32,
+      commentsCount: 8
+    },
+    {
+      id: 3,
+      title: 'תאורה חכמה - איך לחסוך בחשמל ולשפר את האווירה',
+      excerpt: 'כל מה שצריך לדעת על תאורה חכמה ויתרונותיה',
+      content: 'תאורה חכמה היא אחד השיפורים הפשוטים והאפקטיביים ביותר שניתן לעשות בבית...',
+      author: 'דוד שרון',
+      date: '8 דצמבר 2024',
+      category: 'תאורה',
+      image: 'https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?w=600&h=300&fit=crop',
+      likes: 28,
+      commentsCount: 15
     }
-  };
+  ];
 
-  const handleDeletePost = (postId: string) => {
-    dispatch(deletePost(postId));
+  const handleLike = (postId: number) => {
     toast({
-      title: "הפוסט נמחק",
-      description: "הפוסט הוסר מהמערכת",
+      title: "לייק נוסף!",
+      description: "תודה על המשוב החיובי",
     });
-  };
-
-  const handleAddComment = (postId: string) => {
-    if (newComment.trim()) {
-      const comment = {
-        id: Date.now().toString(),
-        author: 'אורח',
-        content: newComment,
-        date: new Date().toLocaleDateString('he-IL')
-      };
-      
-      setComments(prev => ({
-        ...prev,
-        [postId]: [...(prev[postId] || []), comment]
-      }));
-      
-      setNewComment('');
-      toast({
-        title: "תגובה נוספה",
-        description: "התגובה שלך נוספה לפוסט",
-      });
-    }
   };
 
   const handleShare = (post: any) => {
     if (navigator.share) {
       navigator.share({
         title: post.title,
-        text: post.content,
+        text: post.excerpt,
         url: window.location.href
-      }).then(() => {
-        toast({
-          title: "הפוסט שותף בהצלחה",
-          description: "הפוסט נשלח בהצלחה",
-        });
-      }).catch(() => {
-        // Fallback to clipboard
-        fallbackShare(post);
       });
     } else {
-      fallbackShare(post);
+      navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: "הקישור הועתק!",
+        description: "הקישור לפוסט הועתק ללוח",
+      });
     }
   };
 
-  const fallbackShare = (post: any) => {
-    const shareText = `${post.title}\n\n${post.content}\n\nמתוך: בית חכם פלוס`;
-    navigator.clipboard.writeText(shareText).then(() => {
+  const handleAddComment = (postId: number) => {
+    if (!newComment.trim() || !commenterName.trim()) {
       toast({
-        title: "הועתק ללוח",
-        description: "תוכן הפוסט הועתק ללוח. אפשר להדביק אותו בכל מקום!",
-      });
-    }).catch(() => {
-      toast({
-        title: "שגיאת שיתוף",
-        description: "לא ניתן לשתף את הפוסט כרגע",
+        title: "שגיאה",
+        description: "אנא מלא את כל השדות",
         variant: "destructive"
       });
+      return;
+    }
+
+    const comment = {
+      id: Date.now(),
+      author: commenterName,
+      content: newComment,
+      date: new Date().toLocaleDateString('he-IL')
+    };
+
+    setComments(prev => ({
+      ...prev,
+      [postId]: [...(prev[postId] || []), comment]
+    }));
+
+    setNewComment('');
+    setCommenterName('');
+    
+    toast({
+      title: "תגובה נוספה!",
+      description: "התגובה שלך נוספה בהצלחה",
     });
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <Navbar />
       <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">פוסטים ומאמרים</h1>
-            {isAdmin && (
-              <Button onClick={() => setShowAddForm(!showAddForm)} className="flex items-center gap-2">
-                <Plus className="w-4 h-4" />
-                הוסף פוסט חדש
-              </Button>
-            )}
-          </div>
+        <h1 className="text-4xl font-bold text-gray-900 mb-8 text-center">
+          פוסטים ומאמרים
+        </h1>
 
-          {/* Add Post Form */}
-          {showAddForm && isAdmin && (
-            <Card className="mb-8">
-              <CardHeader>
-                <CardTitle>הוסף פוסט חדש</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <Input
-                  placeholder="כותרת הפוסט"
-                  value={newPost.title}
-                  onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
-                />
-                <Input
-                  placeholder="שם המחבר"
-                  value={newPost.author}
-                  onChange={(e) => setNewPost({ ...newPost, author: e.target.value })}
-                />
-                <Textarea
-                  placeholder="תוכן הפוסט"
-                  value={newPost.content}
-                  onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
-                  rows={5}
-                />
-                <Input
-                  placeholder="תגיות (מופרדות בפסיק)"
-                  value={newPost.tags}
-                  onChange={(e) => setNewPost({ ...newPost, tags: e.target.value })}
-                />
-                <div className="flex gap-2">
-                  <Button onClick={handleAddPost}>פרסם פוסט</Button>
-                  <Button variant="outline" onClick={() => setShowAddForm(false)}>
-                    ביטול
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Posts List */}
-          <div className="space-y-6">
+          <div className="lg:col-span-2 space-y-6">
             {posts.map((post) => (
-              <Card key={post.id} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <CardTitle className="text-xl mb-2 text-right">{post.title}</CardTitle>
-                      <div className="flex items-center gap-4 text-sm text-gray-600">
-                        <div className="flex items-center gap-1">
-                          <User className="w-4 h-4" />
-                          <span>{post.author}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Calendar className="w-4 h-4" />
-                          <span>{new Date(post.createdAt).toLocaleDateString('he-IL')}</span>
-                        </div>
-                      </div>
+              <Card key={post.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                <img 
+                  src={post.image} 
+                  alt={post.title}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-6">
+                  <div className="flex items-center gap-4 mb-4">
+                    <Badge variant="secondary">{post.category}</Badge>
+                    <div className="flex items-center text-sm text-gray-600">
+                      <User className="w-4 h-4 ml-1" />
+                      {post.author}
                     </div>
-                    {isAdmin && (
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => handleDeletePost(post.id)}
-                      >
-                        מחק
-                      </Button>
-                    )}
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-700 leading-relaxed mb-4 text-right">{post.content}</p>
-                  
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {post.tags.map((tag, index) => (
-                      <Badge key={index} variant="secondary">
-                        {tag}
-                      </Badge>
-                    ))}
+                    <div className="flex items-center text-sm text-gray-600">
+                      <Calendar className="w-4 h-4 ml-1" />
+                      {post.date}
+                    </div>
                   </div>
 
-                  {/* Actions */}
-                  <div className="flex items-center justify-between pt-4 border-t">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-3">
+                    {post.title}
+                  </h2>
+                  
+                  <p className="text-gray-600 mb-4">
+                    {post.excerpt}
+                  </p>
+
+                  <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => handleLike(post.id)}
-                        className="flex items-center gap-2 text-red-500 hover:text-red-600"
+                        className="flex items-center gap-2"
                       >
                         <Heart className="w-4 h-4" />
-                        <span>{post.likes}</span>
+                        {post.likes}
                       </Button>
                       
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setSelectedPost(selectedPost === post.id ? null : post.id)}
                         className="flex items-center gap-2"
-                        onClick={() => setShowComments(showComments === post.id ? null : post.id)}
                       >
-                        <MessageCircle className="w-4 h-4" />
-                        <span>תגובות ({comments[post.id]?.length || 0})</span>
+                        <MessageSquare className="w-4 h-4" />
+                        {post.commentsCount + (comments[post.id]?.length || 0)}
                       </Button>
                       
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="flex items-center gap-2"
+                      <Button
+                        variant="ghost"
+                        size="sm"
                         onClick={() => handleShare(post)}
+                        className="flex items-center gap-2"
                       >
                         <Share2 className="w-4 h-4" />
-                        <span>שתף</span>
+                        שתף
                       </Button>
                     </div>
-                  </div>
 
-                  {/* Comments Section */}
-                  {showComments === post.id && (
-                    <div className="mt-4 pt-4 border-t">
-                      <div className="space-y-3 mb-4">
-                        {comments[post.id]?.map((comment) => (
-                          <div key={comment.id} className="bg-gray-50 p-3 rounded-lg">
-                            <div className="flex items-center gap-2 mb-1">
-                              <User className="w-4 h-4 text-gray-500" />
-                              <span className="text-sm font-medium">{comment.author}</span>
-                              <span className="text-xs text-gray-500">{comment.date}</span>
+                    <Button 
+                      onClick={() => setSelectedPost(selectedPost === post.id ? null : post.id)}
+                    >
+                      {selectedPost === post.id ? 'סגור' : 'קרא עוד'}
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Expanded Content */}
+                {selectedPost === post.id && (
+                  <div className="px-6 pb-6 border-t bg-gray-50">
+                    <div className="pt-6">
+                      <p className="text-gray-700 mb-6 leading-relaxed">
+                        {post.content}
+                      </p>
+
+                      {/* Comments Section */}
+                      <div className="border-t pt-6">
+                        <h3 className="text-lg font-semibold mb-4">תגובות</h3>
+                        
+                        {/* Existing Comments */}
+                        <div className="space-y-4 mb-6">
+                          {comments[post.id]?.map((comment) => (
+                            <div key={comment.id} className="bg-white p-4 rounded-lg">
+                              <div className="flex items-center gap-2 mb-2">
+                                <User className="w-4 h-4 text-gray-500" />
+                                <span className="font-semibold text-gray-900">{comment.author}</span>
+                                <span className="text-sm text-gray-500">{comment.date}</span>
+                              </div>
+                              <p className="text-gray-700">{comment.content}</p>
                             </div>
-                            <p className="text-sm text-gray-700">{comment.content}</p>
+                          )) || (
+                            <p className="text-gray-500 text-center py-4">
+                              אין תגובות עדיין. היה הראשון להגיב!
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Add Comment Form */}
+                        <div className="bg-white p-4 rounded-lg">
+                          <h4 className="font-semibold mb-3">הוסף תגובה</h4>
+                          <div className="space-y-3">
+                            <Input
+                              placeholder="השם שלך"
+                              value={commenterName}
+                              onChange={(e) => setCommenterName(e.target.value)}
+                            />
+                            <Textarea
+                              placeholder="כתוב את התגובה שלך..."
+                              value={newComment}
+                              onChange={(e) => setNewComment(e.target.value)}
+                              rows={3}
+                            />
+                            <Button 
+                              onClick={() => handleAddComment(post.id)}
+                              className="w-full"
+                            >
+                              הוסף תגובה
+                            </Button>
                           </div>
-                        ))}
-                      </div>
-                      
-                      <div className="flex gap-2">
-                        <Input
-                          placeholder="כתוב תגובה..."
-                          value={newComment}
-                          onChange={(e) => setNewComment(e.target.value)}
-                          onKeyPress={(e) => e.key === 'Enter' && handleAddComment(post.id)}
-                        />
-                        <Button 
-                          size="sm"
-                          onClick={() => handleAddComment(post.id)}
-                        >
-                          <Send className="w-4 h-4" />
-                        </Button>
+                        </div>
                       </div>
                     </div>
-                  )}
-                </CardContent>
+                  </div>
+                )}
               </Card>
             ))}
           </div>
+
+          {/* Sidebar */}
+          <div className="space-y-6">
+            <Card className="p-6">
+              <h3 className="text-lg font-semibold mb-4">קטגוריות פופולריות</h3>
+              <div className="space-y-2">
+                {['מדריכים', 'אבטחה', 'תאורה', 'אקלים', 'אודיו'].map((category) => (
+                  <Button 
+                    key={category} 
+                    variant="ghost" 
+                    className="w-full justify-start"
+                  >
+                    {category}
+                  </Button>
+                ))}
+              </div>
+            </Card>
+
+            <Card className="p-6">
+              <h3 className="text-lg font-semibold mb-4">פוסטים אחרונים</h3>
+              <div className="space-y-4">
+                {posts.slice(0, 3).map((post) => (
+                  <div key={post.id} className="flex gap-3">
+                    <img 
+                      src={post.image} 
+                      alt={post.title}
+                      className="w-16 h-16 object-cover rounded"
+                    />
+                    <div>
+                      <h4 className="font-semibold text-sm leading-tight mb-1">
+                        {post.title}
+                      </h4>
+                      <p className="text-xs text-gray-500">{post.date}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
