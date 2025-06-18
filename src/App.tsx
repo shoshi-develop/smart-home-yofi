@@ -18,6 +18,9 @@ import CookiesPolicy from "./pages/CookiesPolicy";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Posts from "./pages/Posts";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import MyOrders from "./pages/MyOrders";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -39,6 +42,9 @@ const App = () => (
                 <Route path="/guides" element={<Guides />} />
                 <Route path="/custom-service" element={<CustomService />} />
                 <Route path="/posts" element={<Posts />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/checkout" element={<Checkout />} />
+                <Route path="/my-orders" element={<MyOrders />} />
                 <Route path="/privacy" element={<PrivacyPolicy />} />
                 <Route path="/terms" element={<TermsOfService />} />
                 <Route path="/cookies" element={<CookiesPolicy />} />

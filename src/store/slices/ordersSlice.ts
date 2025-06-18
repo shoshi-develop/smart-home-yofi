@@ -12,11 +12,17 @@ interface Order {
   id: string;
   userId: string;
   items: OrderItem[];
-  total: number;
+  totalAmount: number;
   orderDate: string;
-  targetDate: string;
-  address: string;
+  deliveryDate: string;
+  deliveryAddress: string;
   status: 'pending' | 'confirmed' | 'delivered';
+  customerInfo: {
+    fullName: string;
+    email: string;
+    phone: string;
+  };
+  notes?: string;
 }
 
 interface OrdersState {
@@ -31,13 +37,8 @@ const ordersSlice = createSlice({
   name: 'orders',
   initialState,
   reducers: {
-    addOrder: (state, action: PayloadAction<Omit<Order, 'id' | 'orderDate'>>) => {
-      const newOrder: Order = {
-        ...action.payload,
-        id: Date.now().toString(),
-        orderDate: new Date().toISOString(),
-      };
-      state.orders.push(newOrder);
+    addOrder: (state, action: PayloadAction<Order>) => {
+      state.orders.push(action.payload);
     },
     updateOrderStatus: (state, action: PayloadAction<{ id: string; status: Order['status'] }>) => {
       const order = state.orders.find(o => o.id === action.payload.id);

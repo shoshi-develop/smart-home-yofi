@@ -76,14 +76,14 @@ const MyOrders = () => {
                   </div>
                   <Badge 
                     className={
-                      order.status === 'completed' ? 'bg-green-500' :
+                      order.status === 'delivered' ? 'bg-green-500' :
                       order.status === 'pending' ? 'bg-yellow-500' :
                       'bg-blue-500'
                     }
                   >
-                    {order.status === 'completed' ? 'הושלמה' :
+                    {order.status === 'delivered' ? 'נמסרה' :
                      order.status === 'pending' ? 'בהמתנה' :
-                     'בעיבוד'}
+                     'אושרה'}
                   </Badge>
                 </div>
 
