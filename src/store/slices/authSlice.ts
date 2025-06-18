@@ -50,11 +50,31 @@ const authSlice = createSlice({
   reducers: {
     login: (state, action: PayloadAction<{ username: string; password: string }>) => {
       const { username, password } = action.payload;
+      
+      // בדיקה אם המשתמש קיים
       const user = state.users.find(u => u.username === username);
       
       if (user) {
-        const isAdmin = password === ADMIN_PASSWORD;
-        state.currentUser = { ...user, isAdmin };
+        // בדיקה אם זו כניסה של מנהל
+        if (password === ADMIN_PASSWORD) {
+          state.currentUser = { ...user, isAdmin: true };
+          state.isLoggedIn = true;
+        } else {
+          // כניסה של משתמש רגיל - כל סיסמה מתקבלת (לצורך הדגמה)
+          state.currentUser = { ...user, isAdmin: false };
+          state.isLoggedIn = true;
+        }
+      } else {
+        // אם המשתמש לא קיים, ניצור אותו אוטומטית
+        const newUser: User = {
+          id: Date.now().toString(),
+          username,
+          email: `${username}@example.com`,
+          fullName: username,
+          isAdmin: password === ADMIN_PASSWORD,
+        };
+        state.users.push(newUser);
+        state.currentUser = newUser;
         state.isLoggedIn = true;
       }
     },
