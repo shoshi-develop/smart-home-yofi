@@ -1,18 +1,20 @@
 
 import { configureStore } from '@reduxjs/toolkit';
-import authSlice from './slices/authSlice';
-import productsSlice from './slices/productsSlice';
-import cartSlice from './slices/cartSlice';
-import ordersSlice from './slices/ordersSlice';
-import postsSlice from './slices/postsSlice';
+import authReducer from './slices/authSlice';
+import productsReducer from './slices/productsSlice';
+import cartReducer from './slices/cartSlice';
+import ordersReducer from './slices/ordersSlice';
+import postsReducer from './slices/postsSlice';
+import customServiceReducer from './slices/customServiceSlice';
 
 export const store = configureStore({
   reducer: {
-    auth: authSlice,
-    products: productsSlice,
-    cart: cartSlice,
-    orders: ordersSlice,
-    posts: postsSlice,
+    auth: authReducer,
+    products: productsReducer,
+    cart: cartReducer,
+    orders: ordersReducer,
+    posts: postsReducer,
+    customService: customServiceReducer,
   },
 });
 

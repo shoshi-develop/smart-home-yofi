@@ -12,6 +12,7 @@ import Index from "./pages/Index";
 import Products from "./pages/Products";
 import Guides from "./pages/Guides";
 import CustomService from "./pages/CustomService";
+import CustomServiceRequests from "./pages/CustomServiceRequests";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import CookiesPolicy from "./pages/CookiesPolicy";
@@ -45,6 +46,7 @@ const App = () => (
                 <Route path="/products" element={<Products />} />
                 <Route path="/guides" element={<Guides />} />
                 <Route path="/custom-service" element={<CustomService />} />
+                <Route path="/custom-service-requests" element={<CustomServiceRequests />} />
                 <Route path="/posts" element={<Posts />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={<Checkout />} />

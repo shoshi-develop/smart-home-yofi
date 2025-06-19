@@ -1,5 +1,6 @@
 
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -9,8 +10,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { Home, Shield, Lightbulb, Thermometer, Volume2, Tv } from 'lucide-react';
+import { addRequest } from '@/store/slices/customServiceSlice';
 
 export const CustomServiceForm = () => {
+  const dispatch = useDispatch();
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: '',
@@ -56,9 +59,11 @@ export const CustomServiceForm = () => {
 
     setIsSubmitting(true);
     
-    // Simulate form submission
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Save to Redux store
+      dispatch(addRequest(formData));
+      
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
       toast({
         title: "בקשה נשלחה בהצלחה!",

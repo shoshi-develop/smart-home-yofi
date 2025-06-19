@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { ShoppingCart, Menu, X, Home, Package, BookOpen, Settings, LogIn, LogOut, User, FileText, Plus, Users, ShoppingBag, Heart } from 'lucide-react';
+import { ShoppingCart, Menu, X, Home, Package, BookOpen, Settings, LogIn, LogOut, User, FileText, Plus, Users, ShoppingBag, Heart, ClipboardList } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
@@ -28,6 +28,7 @@ export const Navbar = () => {
     { name: 'רשימת מוצרים', href: '/products', icon: Package },
     { name: 'הוספת מוצר', href: '/add-product', icon: Plus },
     { name: 'ניהול הזמנות', href: '/admin/orders', icon: ShoppingBag },
+    { name: 'בקשות התאמה', href: '/custom-service-requests', icon: ClipboardList },
     { name: 'משתמשים', href: '/users', icon: Users },
     { name: 'פוסטים', href: '/posts', icon: FileText },
   ];
