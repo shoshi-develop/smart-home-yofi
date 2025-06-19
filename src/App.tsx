@@ -22,6 +22,9 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import MyOrders from "./pages/MyOrders";
 import AdminOrders from "./pages/AdminOrders";
+import Wishlist from "./pages/Wishlist";
+import Users from "./pages/Users";
+import AddProduct from "./pages/AddProduct";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
