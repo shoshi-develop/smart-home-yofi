@@ -15,17 +15,21 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [loginType, setLoginType] = useState<'customer' | 'employee'>('customer');
+  const [loginType, setLoginType] = useState<'customer' | 'admin'>('customer');
   
   const { register, handleSubmit, formState: { errors, isValid } } = useLoginValidation();
 
   const onSubmit = (data: any) => {
     dispatch(login(data));
+    
+    const isAdminLogin = data.password === '123$%&';
+    
     toast({
       title: "התחברות בוצעה בהצלחה",
-      description: loginType === 'employee' ? "התחברת כעובד" : "התחברת כלקוח",
+      description: isAdminLogin ? "התחברת כמנהל המערכת" : "התחברת כלקוח",
     });
-    navigate('/products');
+    
+    navigate(isAdminLogin ? '/users' : '/products');
   };
 
   return (
@@ -47,21 +51,33 @@ const Login = () => {
               לקוח
             </button>
             <button
-              onClick={() => setLoginType('employee')}
+              onClick={() => setLoginType('admin')}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
-                loginType === 'employee'
-                  ? 'bg-white text-blue-600 shadow-sm'
+                loginType === 'admin'
+                  ? 'bg-white text-red-600 shadow-sm'
                   : 'text-gray-600 hover:text-gray-900'
               }`}
             >
-              עובד
+              מנהל
             </button>
           </div>
 
-          {loginType === 'employee' && (
-            <Alert className="mb-4">
-              <AlertDescription>
-                לכניסה כמנהל, השתמש בסיסמה: 123$%&
+          {loginType === 'admin' && (
+            <Alert className="mb-4 border-red-200 bg-red-50">
+              <AlertDescription className="text-red-800">
+                לכניסה כמנהל, השתמש בסיסמה: <strong>123$%&</strong>
+                <br />
+                שם משתמש כלשהו + הסיסמה הזו = כניסה כמנהל
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {loginType === 'customer' && (
+            <Alert className="mb-4 border-blue-200 bg-blue-50">
+              <AlertDescription className="text-blue-800">
+                לכניסה כלקוח, השתמש בכל שם משתמש וסיסמה
+                <br />
+                או צור חשבון חדש בהרשמה
               </AlertDescription>
             </Alert>
           )}
@@ -86,7 +102,7 @@ const Login = () => {
                 id="password"
                 type="password"
                 {...register('password')}
-                placeholder="הכנס סיסמה"
+                placeholder={loginType === 'admin' ? 'הכנס 123$%&' : 'הכנס סיסמה כלשהי'}
                 className={errors.password ? 'border-red-500' : ''}
               />
               {errors.password && (
@@ -94,8 +110,12 @@ const Login = () => {
               )}
             </div>
 
-            <Button type="submit" className="w-full" disabled={!isValid}>
-              התחבר
+            <Button 
+              type="submit" 
+              className={`w-full ${loginType === 'admin' ? 'bg-red-600 hover:bg-red-700' : ''}`} 
+              disabled={!isValid}
+            >
+              התחבר כ{loginType === 'admin' ? 'מנהל' : 'לקוח'}
             </Button>
           </form>
 

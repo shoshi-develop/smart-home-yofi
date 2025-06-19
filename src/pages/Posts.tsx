@@ -1,4 +1,6 @@
+
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { Card } from '@/components/ui/card';
@@ -11,51 +13,65 @@ import { useToast } from '@/hooks/use-toast';
 
 const Posts = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [selectedPost, setSelectedPost] = useState<number | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [comments, setComments] = useState<Record<number, any[]>>({});
   const [newComment, setNewComment] = useState('');
   const [commenterName, setCommenterName] = useState('');
+  const [postLikes, setPostLikes] = useState<Record<number, number>>({
+    1: 45,
+    2: 32,
+    3: 28
+  });
 
-  const posts = [
+  const allPosts = [
     {
       id: 1,
       title: 'המדריך הכולל לבית חכם לשנת 2024',
       excerpt: 'כל מה שצריך לדעת על התקנת מערכת בית חכם מודרנית',
-      content: 'בעולם שבו הטכנולוגיה מתפתחת במהירות, בתי חכמים הופכים ליותר ויותר נגישים...',
+      content: 'בעולם שבו הטכנולוגיה מתפתחת במהירות, בתי חכמים הופכים ליותר ויותר נגישים. במדריך זה נסביר כיצד לתכנן ולהתקין מערכת בית חכם מודרנית שתעניק לכם נוחות, בטיחות וחיסכון באנרגיה. החל מבחירת הציוד הנכון ועד לתכנון המערכת המושלמת עבור הבית שלכם.',
       author: 'יוסי כהן',
       date: '15 דצמבר 2024',
       category: 'מדריכים',
       image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=600&h=300&fit=crop',
-      likes: 45,
       commentsCount: 12
     },
     {
       id: 2,
       title: '5 טעויות נפוצות בהתקנת מערכת אבטחה',
       excerpt: 'איך להימנע מהטעויות הכי שכיחות בהתקנת מצלמות אבטחה',
-      content: 'התקנת מערכת אבטחה חכמה היא השקעה חשובה לבטיחות הבית...',
+      content: 'התקנת מערכת אבטחה חכמה היא השקעה חשובה לבטיחות הבית. עם זאת, רבים נכשלים בשלבי התכנון וההתקנה. במאמר זה נחשף את 5 הטעויות השכיחות ביותר ונלמד איך להימנע מהן כדי להבטיח הגנה מקסימלית על הבית.',
       author: 'רחל לוי',
       date: '12 דצמבר 2024',
       category: 'אבטחה',
       image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=300&fit=crop',
-      likes: 32,
       commentsCount: 8
     },
     {
       id: 3,
       title: 'תאורה חכמה - איך לחסוך בחשמל ולשפר את האווירה',
       excerpt: 'כל מה שצריך לדעת על תאורה חכמה ויתרונותיה',
-      content: 'תאורה חכמה היא אחד השיפורים הפשוטים והאפקטיביים ביותר שניתן לעשות בבית...',
+      content: 'תאורה חכמה היא אחד השיפורים הפשוטים והאפקטיביים ביותר שניתן לעשות בבית. היא מאפשרת חיסכון של עד 80% בעלויות החשמל, יצירת אווירות שונות בבית ושליטה מלאה מכל מקום. נלמד יחד איך לבחור את המוצרים הנכונים ולתכנן מערכת תאורה מושלמת.',
       author: 'דוד שרון',
       date: '8 דצמבר 2024',
       category: 'תאורה',
       image: 'https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?w=600&h=300&fit=crop',
-      likes: 28,
       commentsCount: 15
     }
   ];
 
+  const categories = ['מדריכים', 'אבטחה', 'תאורה', 'אקלים', 'אודיו'];
+
+  const filteredPosts = selectedCategory === 'all' 
+    ? allPosts 
+    : allPosts.filter(post => post.category === selectedCategory);
+
   const handleLike = (postId: number) => {
+    setPostLikes(prev => ({
+      ...prev,
+      [postId]: (prev[postId] || 0) + 1
+    }));
     toast({
       title: "לייק נוסף!",
       description: "תודה על המשוב החיובי",
@@ -109,6 +125,11 @@ const Posts = () => {
     });
   };
 
+  const handleCategoryClick = (category: string) => {
+    setSelectedCategory(category);
+    setSelectedPost(null);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <Navbar />
@@ -120,7 +141,7 @@ const Posts = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Posts List */}
           <div className="lg:col-span-2 space-y-6">
-            {posts.map((post) => (
+            {filteredPosts.map((post) => (
               <Card key={post.id} className="overflow-hidden hover:shadow-lg transition-shadow">
                 <img 
                   src={post.image} 
@@ -154,10 +175,10 @@ const Posts = () => {
                         variant="ghost"
                         size="sm"
                         onClick={() => handleLike(post.id)}
-                        className="flex items-center gap-2"
+                        className="flex items-center gap-2 hover:text-red-600"
                       >
                         <Heart className="w-4 h-4" />
-                        {post.likes}
+                        {postLikes[post.id] || 0}
                       </Button>
                       
                       <Button
@@ -255,11 +276,19 @@ const Posts = () => {
             <Card className="p-6">
               <h3 className="text-lg font-semibold mb-4">קטגוריות פופולריות</h3>
               <div className="space-y-2">
-                {['מדריכים', 'אבטחה', 'תאורה', 'אקלים', 'אודיו'].map((category) => (
+                <Button 
+                  variant={selectedCategory === 'all' ? 'default' : 'ghost'} 
+                  className="w-full justify-start"
+                  onClick={() => handleCategoryClick('all')}
+                >
+                  כל הקטגוריות
+                </Button>
+                {categories.map((category) => (
                   <Button 
                     key={category} 
-                    variant="ghost" 
+                    variant={selectedCategory === category ? 'default' : 'ghost'} 
                     className="w-full justify-start"
+                    onClick={() => handleCategoryClick(category)}
                   >
                     {category}
                   </Button>
@@ -270,8 +299,8 @@ const Posts = () => {
             <Card className="p-6">
               <h3 className="text-lg font-semibold mb-4">פוסטים אחרונים</h3>
               <div className="space-y-4">
-                {posts.slice(0, 3).map((post) => (
-                  <div key={post.id} className="flex gap-3">
+                {allPosts.slice(0, 3).map((post) => (
+                  <div key={post.id} className="flex gap-3 cursor-pointer hover:bg-gray-50 p-2 rounded">
                     <img 
                       src={post.image} 
                       alt={post.title}
