@@ -47,7 +47,6 @@ export const Navbar = () => {
     { name: 'בית', href: '/', icon: Home },
     { name: 'מוצרים', href: '/products', icon: Package },
     { name: 'מדריכים', href: '/guides', icon: BookOpen },
-    { name: 'התאמה אישית', href: '/custom-service', icon: Settings },
     { name: 'פוסטים', href: '/posts', icon: FileText },
   ];
 
@@ -91,6 +90,14 @@ export const Navbar = () => {
 
           {/* User Actions */}
           <div className="flex items-center space-x-4 rtl:space-x-reverse">
+            {/* Custom Service Button - visible for all users */}
+            <Button variant="outline" size="sm" asChild>
+              <Link to="/custom-service" className="flex items-center space-x-2 rtl:space-x-reverse">
+                <Settings className="w-4 h-4" />
+                <span className="hidden sm:inline">התאמה אישית</span>
+              </Link>
+            </Button>
+
             {isLoggedIn && !isAdmin && (
               <>
                 <Button variant="outline" size="sm" className="relative" asChild>
@@ -178,6 +185,16 @@ export const Navbar = () => {
                   </Link>
                 );
               })}
+              
+              {/* Custom Service in mobile menu */}
+              <Link
+                to="/custom-service"
+                className="flex items-center space-x-2 rtl:space-x-reverse px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                onClick={() => setIsOpen(false)}
+              >
+                <Settings className="w-4 h-4" />
+                <span>התאמה אישית</span>
+              </Link>
               
               {!isLoggedIn && (
                 <div className="pt-4 border-t space-y-2">

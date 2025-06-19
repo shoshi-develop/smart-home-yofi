@@ -52,15 +52,10 @@ export const Hero = () => {
             גלה את האוסף המקיף ביותר של מוצרי בית חכם בישראל. 
             טכנולוגיה מתקדמת, התקנה פשוטה, שירות מקצועי.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex justify-center">
             <Link to="/products">
               <Button size="lg" className="bg-white text-emerald-600 hover:bg-emerald-50 font-semibold px-8 py-3 text-lg">
                 צפה במוצרים
-              </Button>
-            </Link>
-            <Link to="/custom-service">
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-emerald-600 font-semibold px-8 py-3 text-lg">
-                התאמה אישית
               </Button>
             </Link>
           </div>
