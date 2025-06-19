@@ -14,14 +14,20 @@ import { Link } from 'react-router-dom';
 
 const Wishlist = () => {
   const { items, removeFromWishlist } = useWishlist();
-  const products = useSelector((state: RootState) => state.products.items);
+  const products = useSelector((state: RootState) => state.products.products);
   const dispatch = useDispatch();
   const { toast } = useToast();
 
-  const handleAddToCart = (productId: string) => {
-    const product = products.find(p => p.id === productId);
+  const handleAddToCart = (productId: number) => {
+    const product = products.find(p => p.id === productId.toString());
     if (product) {
-      dispatch(addToCart({ product, quantity: 1 }));
+      dispatch(addToCart({ 
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        quantity: 1 
+      }));
       toast({
         title: "נוסף לסל הקניות",
         description: `${product.name} נוסף לסל הקניות`,
@@ -29,7 +35,7 @@ const Wishlist = () => {
     }
   };
 
-  const handleRemoveFromWishlist = (productId: string) => {
+  const handleRemoveFromWishlist = (productId: number) => {
     removeFromWishlist(productId);
     toast({
       title: "הוסר מרשימת המשאלות",
@@ -38,8 +44,8 @@ const Wishlist = () => {
   };
 
   const wishlistProducts = items.map(item => {
-    const product = products.find(p => p.id === item.id);
-    return product ? { ...product, addedAt: item.addedAt } : null;
+    const product = products.find(p => p.id === item.id.toString());
+    return product ? { ...item, ...product } : null;
   }).filter(Boolean);
 
   return (
@@ -86,7 +92,7 @@ const Wishlist = () => {
                     variant="outline"
                     size="sm"
                     className="absolute top-2 right-2 bg-white/80 backdrop-blur-sm"
-                    onClick={() => handleRemoveFromWishlist(product?.id || '')}
+                    onClick={() => handleRemoveFromWishlist(product?.id || 0)}
                   >
                     <Trash2 className="w-4 h-4 text-red-500" />
                   </Button>
@@ -97,18 +103,28 @@ const Wishlist = () => {
                     <span className="text-2xl font-bold text-blue-600">
                       ₪{product?.price}
                     </span>
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center">
+                        <span className="text-yellow-400">★</span>
+                        <span className="text-sm text-gray-600 mr-1">
+                          {product?.rating || 0}
+                        </span>
+                      </div>
+                      <span className="text-sm text-gray-500">
+                        ({product?.reviews || 0} ביקורות)
+                      </span>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex justify-between items-center mb-4">
                     <Badge variant={product?.inStock ? 'default' : 'secondary'}>
                       {product?.inStock ? 'במלאי' : 'אזל מהמלאי'}
                     </Badge>
                   </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                    {product?.description}
-                  </p>
                   <Button
                     className="w-full"
-                    onClick={() => handleAddToCart(product?.id || '')}
+                    onClick={() => handleAddToCart(product?.id || 0)}
                     disabled={!product?.inStock}
                   >
                     <Plus className="w-4 h-4 mr-2" />
